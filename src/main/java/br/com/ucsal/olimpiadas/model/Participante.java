@@ -5,6 +5,12 @@ public class Participante {
     private String nome;
     private String email;
 
+    public Participante(ParticipanteBuilder participanteBuilder) {
+        this.id = participanteBuilder.id;
+        this.nome = participanteBuilder.nome;
+        this.email = participanteBuilder.email;
+    }
+
     public long getId() {
         return id;
     }
@@ -27,5 +33,30 @@ public class Participante {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public static class ParticipanteBuilder {
+        private long id;
+        private String nome;
+        private String email;
+
+        public ParticipanteBuilder id(long id) {
+            this.id = id;
+            return this;
+        }
+
+        public ParticipanteBuilder nome(String nome) {
+            this.nome = nome;
+            return this;
+        }
+
+        public ParticipanteBuilder email(String email) {
+            this.email = email;
+            return this;
+        }
+
+        public Participante build() {
+            return new Participante(this);
+        }
     }
 }

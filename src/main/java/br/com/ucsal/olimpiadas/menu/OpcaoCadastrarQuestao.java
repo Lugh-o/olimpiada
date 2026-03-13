@@ -2,22 +2,26 @@ package br.com.ucsal.olimpiadas.menu;
 
 import br.com.ucsal.olimpiadas.input.Input;
 import br.com.ucsal.olimpiadas.model.Questao;
-import br.com.ucsal.olimpiadas.store.Store;
+import br.com.ucsal.olimpiadas.repository.Store;
+
 import static br.com.ucsal.olimpiadas.common.CommmonUtils.escolherProva;
 
-public class OpcaoCadastrarQuestao extends OpcaoMenu{
-    public OpcaoCadastrarQuestao() {
+public class OpcaoCadastrarQuestao extends OpcaoMenu {
+    private final Store repository;
+
+    public OpcaoCadastrarQuestao(Store repository) {
         super("Cadastrar questão (A–E) em uma prova");
+        this.repository = repository;
     }
 
     @Override
     void acao(Input in) {
-        if (Store.getProvas().isEmpty()) {
+        if (repository.getProvas().isEmpty()) {
             System.out.println("não há provas cadastradas");
             return;
         }
 
-        Long provaId = escolherProva(in);
+        Long provaId = escolherProva(in, repository);
         if (provaId == null) return;
 
         System.out.println("Enunciado:");
@@ -39,14 +43,15 @@ public class OpcaoCadastrarQuestao extends OpcaoMenu{
             return;
         }
 
+        // TODO Builder
         Questao q = new Questao();
-        q.setId(Store.getProximaQuestaoId());
+        q.setId(repository.getProximaQuestaoId());
         q.setProvaId(provaId);
         q.setEnunciado(enunciado);
         q.setAlternativas(alternativas);
         q.setAlternativaCorreta(correta);
 
-        Store.adicionarQuestao(q);
+        repository.adicionarQuestao(q);
 
         System.out.println("Questão cadastrada: " + q.getId() + " (na prova " + provaId + ")");
     }

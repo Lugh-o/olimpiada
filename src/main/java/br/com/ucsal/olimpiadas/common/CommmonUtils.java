@@ -4,7 +4,7 @@ import br.com.ucsal.olimpiadas.input.Input;
 import br.com.ucsal.olimpiadas.model.Prova;
 import br.com.ucsal.olimpiadas.model.Resposta;
 import br.com.ucsal.olimpiadas.model.Tentativa;
-import br.com.ucsal.olimpiadas.store.Store;
+import br.com.ucsal.olimpiadas.repository.Store;
 
 public class CommmonUtils {
     public static int calcularNota(Tentativa tentativa) {
@@ -15,16 +15,16 @@ public class CommmonUtils {
         return acertos;
     }
 
-    public static Long escolherProva(Input in) {
+    public static Long escolherProva(Input in, Store repository) {
         System.out.println("\nProvas:");
-        for (Prova p : Store.getProvas()) {
+        for (Prova p : repository.getProvas()) {
             System.out.printf("  %d) %s%n", p.getId(), p.getTitulo());
         }
         System.out.print("Escolha o id da prova: ");
 
         try {
             long id = Long.parseLong(in.nextLine());
-            boolean existe = Store.getProvas().stream().anyMatch(p -> p.getId() == id);
+            boolean existe = repository.getProvas().stream().anyMatch(p -> p.getId() == id);
             if (!existe) {
                 System.out.println("id inválido");
                 return null;

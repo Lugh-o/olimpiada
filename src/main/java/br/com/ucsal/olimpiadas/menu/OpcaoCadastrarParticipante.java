@@ -2,11 +2,14 @@ package br.com.ucsal.olimpiadas.menu;
 
 import br.com.ucsal.olimpiadas.input.Input;
 import br.com.ucsal.olimpiadas.model.Participante;
-import br.com.ucsal.olimpiadas.store.Store;
+import br.com.ucsal.olimpiadas.repository.Store;
 
 public class OpcaoCadastrarParticipante extends OpcaoMenu {
-    public OpcaoCadastrarParticipante() {
+    private final Store repository;
+
+    public OpcaoCadastrarParticipante(Store repository) {
         super("Cadastrar participante");
+        this.repository = repository;
     }
 
     @Override
@@ -22,12 +25,13 @@ public class OpcaoCadastrarParticipante extends OpcaoMenu {
             return;
         }
 
-        Participante p = new Participante();
-        p.setId(Store.getProximoParticipanteId());
-        p.setNome(nome);
-        p.setEmail(email);
+        Participante p = new Participante.ParticipanteBuilder()
+                .id(repository.getProximoParticipanteId())
+                .nome(nome)
+                .email(email)
+                .build();
 
-        Store.adicionarParticipante(p);
+        repository.adicionarParticipante(p);
         System.out.println("Participante cadastrado: " + p.getId());
     }
 }

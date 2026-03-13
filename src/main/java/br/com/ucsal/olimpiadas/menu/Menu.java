@@ -27,19 +27,19 @@ public class Menu {
 
         String entrada = in.nextLine();
 
-        int i;
+        int entradaInteira;
         try {
-            i = Integer.parseInt(entrada) - 1;
+            entradaInteira = Integer.parseInt(entrada) - 1;
         } catch (NumberFormatException e) {
-            System.out.println("opção inválida");
+            System.out.println("Opção inválida.");
             return;
         }
 
-        if (i < 0 || i >= listaOpcoes.size()) {
-            System.out.println("opção inválida");
+        if (entradaInteira < 0 || entradaInteira >= listaOpcoes.size()) {
+            System.out.println("Opção inválida.");
             return;
         }
 
-        listaOpcoes.get(i).acao(in);
+        listaOpcoes.get(entradaInteira).acao(in);
     }
 }

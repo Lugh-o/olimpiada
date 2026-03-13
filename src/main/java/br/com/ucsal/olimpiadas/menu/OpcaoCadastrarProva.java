@@ -2,11 +2,14 @@ package br.com.ucsal.olimpiadas.menu;
 
 import br.com.ucsal.olimpiadas.input.Input;
 import br.com.ucsal.olimpiadas.model.Prova;
-import br.com.ucsal.olimpiadas.store.Store;
+import br.com.ucsal.olimpiadas.repository.Store;
 
 public class OpcaoCadastrarProva extends OpcaoMenu {
-    public OpcaoCadastrarProva() {
+    private final Store repository;
+
+    public OpcaoCadastrarProva(Store repository) {
         super("Cadastrar prova");
+        this.repository = repository;
     }
 
     @Override
@@ -19,11 +22,12 @@ public class OpcaoCadastrarProva extends OpcaoMenu {
             return;
         }
 
-        Prova prova = new Prova();
-        prova.setId(Store.getProximaProvaId());
-        prova.setTitulo(titulo);
+        Prova prova = new Prova.ProvaBuilder()
+                .id(repository.getProximaProvaId())
+                .titulo(titulo)
+                .build();
 
-        Store.adicionarProva(prova);
+        repository.adicionarProva(prova);
         System.out.println("Prova criada: " + prova.getId());
     }
 }

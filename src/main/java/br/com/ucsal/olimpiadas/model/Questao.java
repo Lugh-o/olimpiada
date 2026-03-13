@@ -2,6 +2,7 @@ package br.com.ucsal.olimpiadas.model;
 
 import java.util.Arrays;
 
+// TODO BUILDER + SRP
 public class Questao {
     private long id;
     private long provaId;
