@@ -46,6 +46,10 @@ public class Participante {
         }
 
         public ParticipanteBuilder nome(String nome) {
+            if (nome == null || nome.isBlank()) {
+                throw new IllegalArgumentException("nome inválido");
+            }
+
             this.nome = nome;
             return this;
         }

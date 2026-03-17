@@ -4,6 +4,7 @@ import br.com.ucsal.olimpiadas.model.Participante;
 import br.com.ucsal.olimpiadas.model.Prova;
 import br.com.ucsal.olimpiadas.model.Questao;
 import br.com.ucsal.olimpiadas.model.Tentativa;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -26,22 +27,18 @@ public class Store {
                 .build();
         this.adicionarProva(prova);
 
-        Questao q1 = new Questao();
-        q1.setId(getProximaQuestaoId());
-        q1.setProvaId(prova.getId());
-
-        q1.setEnunciado("""
-                Questão 1 — Mate em 1.
-                É a vez das brancas.
-                Encontre o lance que dá mate imediatamente.
-                """);
-
-        q1.setFenInicial("6k1/5ppp/8/8/8/7Q/6PP/6K1 w - - 0 1");
-
-        q1.setAlternativas(new String[]{"A) Qh7#", "B) Qf5#", "C) Qc8#", "D) Qh8#", "E) Qe6#"});
-
-        q1.setAlternativaCorreta('C');
-
+        Questao q1 = new Questao.QuestaoBuilder()
+                .id(getProximaQuestaoId())
+                .provaId(prova.getId())
+                .enunciado("""
+                        Questão 1 — Mate em 1.
+                        É a vez das brancas.
+                        Encontre o lance que dá mate imediatamente.
+                        """)
+                .fenInicial("6k1/5ppp/8/8/8/7Q/6PP/6K1 w - - 0 1")
+                .alternativas(new String[]{"A) Qh7#", "B) Qf5#", "C) Qc8#", "D) Qh8#", "E) Qe6#"})
+                .alternativaCorreta('C')
+                .build();
         this.adicionarQuestao(q1);
     }
 
@@ -75,6 +72,12 @@ public class Store {
 
     public List<Tentativa> getTentativas() {
         return Collections.unmodifiableList(this.tentativas);
+    }
+
+    public List<Questao> getQuestoesPorProva(long provaId) {
+        return this.questoes.stream()
+                .filter(q -> q.getProvaId() == provaId)
+                .toList();
     }
 
     public void adicionarParticipante(Participante p) {

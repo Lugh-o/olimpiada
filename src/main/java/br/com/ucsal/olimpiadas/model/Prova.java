@@ -35,6 +35,10 @@ public class Prova {
         }
 
         public ProvaBuilder titulo(String titulo) {
+            if (titulo == null || titulo.isBlank()) {
+                throw new IllegalArgumentException("título inválido");
+            }
+
             this.titulo = titulo;
             return this;
         }

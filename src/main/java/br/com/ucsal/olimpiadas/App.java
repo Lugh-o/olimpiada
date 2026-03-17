@@ -4,12 +4,15 @@ import br.com.ucsal.olimpiadas.input.ConsoleInput;
 import br.com.ucsal.olimpiadas.input.Input;
 import br.com.ucsal.olimpiadas.menu.*;
 import br.com.ucsal.olimpiadas.repository.Store;
+
 import java.util.List;
 import java.util.Scanner;
 
 public class App {
     static void main() {
         Store repository = new Store();
+        repository.seed();
+
         Input in = new ConsoleInput(new Scanner(System.in));
         List<OpcaoMenu> opcoes = List.of(
                 new OpcaoCadastrarParticipante(repository),
@@ -19,7 +22,6 @@ public class App {
                 new OpcaoListarTentativas(repository),
                 new OpcaoSair());
         Menu menu = new Menu(in, opcoes);
-        repository.seed();
 
         while (true) {
             menu.executar();

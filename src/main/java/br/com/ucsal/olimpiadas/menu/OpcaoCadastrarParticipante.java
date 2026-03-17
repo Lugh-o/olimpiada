@@ -16,22 +16,19 @@ public class OpcaoCadastrarParticipante extends OpcaoMenu {
     void acao(Input in) {
         System.out.print("Nome: ");
         String nome = in.nextLine();
-
         System.out.print("Email (opcional): ");
         String email = in.nextLine();
 
-        if (nome == null || nome.isBlank()) {
-            System.out.println("nome inválido");
-            return;
+        try {
+            Participante p = new Participante.ParticipanteBuilder()
+                    .id(repository.getProximoParticipanteId())
+                    .nome(nome)
+                    .email(email)
+                    .build();
+            repository.adicionarParticipante(p);
+            System.out.println("Participante cadastrado: " + p.getId());
+        } catch (Exception e) {
+            System.out.println("Erro ao cadastrar participante: " + e.getMessage());
         }
-
-        Participante p = new Participante.ParticipanteBuilder()
-                .id(repository.getProximoParticipanteId())
-                .nome(nome)
-                .email(email)
-                .build();
-
-        repository.adicionarParticipante(p);
-        System.out.println("Participante cadastrado: " + p.getId());
     }
 }

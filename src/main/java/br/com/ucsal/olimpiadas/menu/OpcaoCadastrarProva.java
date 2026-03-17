@@ -16,18 +16,15 @@ public class OpcaoCadastrarProva extends OpcaoMenu {
     void acao(Input in) {
         System.out.print("Título da prova: ");
         String titulo = in.nextLine();
-
-        if (titulo == null || titulo.isBlank()) {
-            System.out.println("título inválido");
-            return;
+        try {
+            Prova prova = new Prova.ProvaBuilder()
+                    .id(repository.getProximaProvaId())
+                    .titulo(titulo)
+                    .build();
+            repository.adicionarProva(prova);
+            System.out.println("Prova criada: " + prova.getId());
+        } catch (Exception e) {
+            System.out.println("Erro ao cadastrar prova: " + e.getMessage());
         }
-
-        Prova prova = new Prova.ProvaBuilder()
-                .id(repository.getProximaProvaId())
-                .titulo(titulo)
-                .build();
-
-        repository.adicionarProva(prova);
-        System.out.println("Prova criada: " + prova.getId());
     }
 }

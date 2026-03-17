@@ -1,10 +1,11 @@
 package br.com.ucsal.olimpiadas.menu;
 
 import br.com.ucsal.olimpiadas.input.Input;
+import br.com.ucsal.olimpiadas.model.Prova;
 import br.com.ucsal.olimpiadas.model.Questao;
 import br.com.ucsal.olimpiadas.repository.Store;
 
-import static br.com.ucsal.olimpiadas.common.CommmonUtils.escolherProva;
+import static br.com.ucsal.olimpiadas.common.CommonUtils.escolherProva;
 
 public class OpcaoCadastrarQuestao extends OpcaoMenu {
     private final Store repository;
@@ -21,8 +22,10 @@ public class OpcaoCadastrarQuestao extends OpcaoMenu {
             return;
         }
 
-        Long provaId = escolherProva(in, repository);
-        if (provaId == null) return;
+        Prova prova = escolherProva(in, repository);
+        if (prova == null) return;
+
+        long provaId = prova.getId();
 
         System.out.println("Enunciado:");
         String enunciado = in.nextLine();
@@ -37,22 +40,34 @@ public class OpcaoCadastrarQuestao extends OpcaoMenu {
         System.out.print("Alternativa correta (A–E): ");
         char correta;
         try {
-            correta = Questao.normalizar(in.nextLine().trim().charAt(0));
+            correta = in.nextLine().trim().toUpperCase().charAt(0);
         } catch (Exception e) {
-            System.out.println("alternativa inválida");
+            System.out.println("entrada inválida");
             return;
         }
 
-        // TODO Builder
-        Questao q = new Questao();
-        q.setId(repository.getProximaQuestaoId());
-        q.setProvaId(provaId);
-        q.setEnunciado(enunciado);
-        q.setAlternativas(alternativas);
-        q.setAlternativaCorreta(correta);
+        System.out.println("FEN inicial:");
+        String fen = in.nextLine();
+        if (fen == null || fen.isBlank()) {
+            System.out.println("FEN obrigatório");
+            return;
+        }
 
-        repository.adicionarQuestao(q);
+        try {
+            Questao q = new Questao.QuestaoBuilder()
+                    .id(repository.getProximaQuestaoId())
+                    .provaId(provaId)
+                    .enunciado(enunciado)
+                    .alternativas(alternativas)
+                    .alternativaCorreta(correta)
+                    .fenInicial(fen)
+                    .build();
+            repository.adicionarQuestao(q);
 
-        System.out.println("Questão cadastrada: " + q.getId() + " (na prova " + provaId + ")");
+            System.out.println(
+                    "Questão cadastrada: " + q.getId() + " (na prova " + provaId + ")");
+        } catch (Exception e) {
+            System.out.println("Erro ao cadastrar questão: " + e.getMessage());
+        }
     }
 }

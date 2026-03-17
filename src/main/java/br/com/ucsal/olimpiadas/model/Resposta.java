@@ -35,6 +35,10 @@ public class Resposta {
         this.correta = correta;
     }
 
+    public static boolean verificar(Questao q, char marcada) {
+        return Character.toUpperCase(marcada) == Character.toUpperCase(q.getAlternativaCorreta());
+    }
+
     public static class RespostaBuilder {
         private long questaoId;
         private char alternativaMarcada;
